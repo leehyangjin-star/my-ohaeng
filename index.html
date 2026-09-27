@@ -1,0 +1,440 @@
+<title>오행 지갑 컬러</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #F3EDE2;
+    --paper: #FDFAF3;
+    --ink: #221E19;
+    --ink-2: #5C5347;
+    --ink-3: #8C8273;
+    --line: #E4DCCD;
+    --rule: #2A241D;
+    --accent: #8E5A2B;
+    --field: #FFFFFF;
+    --wood: #3F6B4A; --fire: #B63A2F; --earth: #9C6B3E; --metal: #C9A964; --water: #1F2A44;
+    --serif: "Nanum Myeongjo", "AppleMyungjo", "Batang", serif;
+    --sans: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); font-family: var(--sans);
+    font-size: 15px; line-height: 1.6; padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; display: grid; gap: 28px; }
+  header .eyebrow { font-size: 12px; letter-spacing: .32em; color: var(--ink-3); font-weight: 500; }
+  h1 {
+    font-family: var(--serif); font-weight: 800; font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.22; margin: 10px 0 8px; text-wrap: balance; letter-spacing: -.01em;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  header p { margin: 0; color: var(--ink-2); }
+
+  .layout { display: grid; grid-template-columns: 320px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+  form {
+    background: var(--paper); border-radius: 18px; padding: 22px; display: grid; gap: 14px;
+    border: 1px solid var(--line);
+  }
+  form h2 { font-family: var(--serif); font-size: 18px; margin: 0; }
+  label { display: grid; gap: 5px; font-size: 13px; color: var(--ink-2); font-weight: 500; }
+  input[type=text], input[type=date], input[type=time] {
+    font: inherit; font-size: 15px; color: var(--ink); background: var(--field);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%;
+  }
+  input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .note { font-size: 12px; color: var(--ink-3); line-height: 1.55; margin: 0; }
+  button {
+    font: inherit; font-weight: 700; border: 0; border-radius: 12px; padding: 12px 16px; cursor: pointer;
+    background: var(--rule); color: var(--paper);
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
+  button:hover { filter: brightness(1.08); }
+  .actions { display: grid; gap: 8px; }
+  .toast { font-size: 13px; color: var(--accent); min-height: 1.2em; margin: 0; }
+
+  /* ---------- 결과 카드 ---------- */
+  .stage { display: grid; gap: 16px; justify-items: center; }
+  .card {
+    width: 100%; max-width: 560px; background: var(--bg); padding: 40px 30px 30px;
+    display: grid; gap: 22px; border-radius: 4px;
+  }
+  .card .eyebrow { font-size: 11px; letter-spacing: .3em; color: var(--ink-3); font-weight: 500; }
+  .card h3 {
+    font-family: var(--serif); font-weight: 800; font-size: 30px; line-height: 1.25; margin: 6px 0 6px;
+    text-wrap: balance;
+  }
+  .card h3 em { font-style: normal; color: var(--accent); }
+  .card .meta { font-size: 13px; color: var(--ink-2); margin: 0; }
+
+  .panel { background: var(--paper); border-radius: 16px; padding: 18px 18px; display: grid; gap: 12px; }
+  .panel-title {
+    font-size: 13px; font-weight: 700; color: var(--ink); padding-bottom: 8px;
+    border-bottom: 1.5px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .panel-title small { font-weight: 400; color: var(--ink-3); font-size: 11px; }
+
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
+  .pillar { display: grid; gap: 5px; }
+  .pillar .lab { font-size: 11px; color: var(--ink-3); }
+  .pillar.me .lab { color: var(--accent); font-weight: 700; }
+  .gz {
+    font-family: var(--serif); font-weight: 800; font-size: 24px; line-height: 1;
+    border-radius: 10px; padding: 10px 0 8px; display: grid; gap: 3px; color: #fff;
+  }
+  .gz small { font-family: var(--sans); font-size: 10px; font-weight: 500; opacity: .9; }
+  .gz.metal { color: #3A2E12; }
+  .pillar.me .gz.stem { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--accent); }
+  .gz.empty { background: #EFE8DA; color: var(--ink-3); font-size: 14px; padding: 18px 0; }
+
+  .dist { display: grid; gap: 7px; }
+  .dist-row { display: grid; grid-template-columns: 28px 60px 1fr 26px; align-items: center; gap: 8px; font-size: 13px; }
+  .dot {
+    width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 800; font-size: 14px; color: #fff;
+  }
+  .dot.metal { color: #3A2E12; }
+  .bar { height: 10px; background: #EFE8DA; border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 99px; }
+  .dist-row .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .dist-row .tag { font-size: 11px; color: var(--ink-3); }
+  .daymaster { font-size: 13px; color: var(--ink-2); margin: 0; }
+  .daymaster b { color: var(--ink); font-family: var(--serif); }
+
+  .rec { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .rec:first-of-type { border-top: 0; padding-top: 2px; }
+  .big-dot {
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+    font-family: var(--serif); font-weight: 800; font-size: 24px; color: #fff;
+  }
+  .big-dot.metal { color: #3A2E12; }
+  .rec h4 { margin: 0; font-family: var(--serif); font-size: 17px; font-weight: 800; }
+  .rec h4 span { font-family: var(--sans); font-size: 11px; color: var(--ink-3); font-weight: 500; margin-left: 6px; }
+  .rec .cname { font-family: var(--serif); font-weight: 800; font-size: 15px; margin: 3px 0 5px; }
+  .swatches { display: flex; gap: 6px; }
+  .sw { width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(0,0,0,.12); }
+  .rec p { margin: 6px 0 0; font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+  .rec .power { font-size: 12px; color: var(--ink); font-weight: 700; }
+  .rec.avoid .big-dot { opacity: .55; }
+  .rec.avoid .cname { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+  .tips { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .tips li { display: grid; grid-template-columns: 22px 64px 1fr; gap: 6px; font-size: 13px; align-items: baseline; }
+  .tips b { font-weight: 700; }
+  .tips span { color: var(--ink-2); }
+
+  .card-foot { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--ink-3); }
+  .card-foot .hanja { font-family: var(--serif); letter-spacing: .9em; font-size: 14px; color: var(--ink-2); }
+  .card .disc { font-size: 10.5px; color: var(--ink-3); margin: -8px 0 0; line-height: 1.5; }
+
+  .export { width: 100%; max-width: 560px; display: grid; gap: 8px; }
+  .export img { width: 100%; border-radius: 6px; border: 1px solid var(--line); }
+  .export p { margin: 0; font-size: 13px; color: var(--ink-2); text-align: center; }
+
+  @media (max-width: 460px) {
+    .card { padding: 28px 16px 22px; }
+    .card h3 { font-size: 25px; }
+    .gz { font-size: 20px; }
+    .tips li { grid-template-columns: 22px 1fr; }
+    .tips li span { grid-column: 2; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .bar i { transition: width .5s ease; }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">五行 · WALLET COLOR</div>
+    <h1>오행으로 찾아보는<br>나에게 필요한 <em>지갑 컬러</em></h1>
+    <p>이름과 양력 생년월일시를 넣으면 사주 오행을 계산해 부족한 기운을 채워줄 컬러를 알려드려요.</p>
+  </header>
+
+  <div class="layout">
+    <form id="f" autocomplete="off">
+      <h2>정보 입력</h2>
+      <label for="name">이름
+        <input id="name" type="text" value="김하늘" maxlength="12" required>
+      </label>
+      <label for="date">생년월일 (양력)
+        <input id="date" type="date" value="1990-05-15" min="1920-01-01" max="2050-12-31" required>
+      </label>
+      <label for="time">태어난 시간
+        <input id="time" type="time" value="14:00">
+      </label>
+      <label class="check" for="notime"><input id="notime" type="checkbox"> 태어난 시간을 몰라요</label>
+      <label for="handle">카드 하단 계정명
+        <input id="handle" type="text" value="@계정명" maxlength="24">
+      </label>
+      <div class="actions">
+        <button type="submit">결과 보기</button>
+        <button type="button" class="ghost" id="mkimg">이미지로 만들기</button>
+        <button type="button" class="ghost" id="copy">결과 텍스트 복사</button>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+      <p class="note">양력 기준이며, 절기(입춘·경칩 등)로 연·월을 나누고 한국 표준시에서 30분을 보정해 시주를 정해요. 1954~1961년생이나 서머타임 시기(1948~51, 1955~60, 1987~88년) 출생은 시간이 한 시간가량 다를 수 있어요. 절기가 바뀌는 시각 전후 30분 안에 태어났다면 만세력으로 한 번 더 확인해 주세요.</p>
+    </form>
+
+    <div class="stage">
+      <div class="card" id="card"></div>
+      <div class="export" id="export" hidden>
+        <img id="outimg" alt="오행 컬러 결과 이미지">
+        <p>이미지를 길게 누르거나 우클릭해서 저장하세요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+const STEMS = '甲乙丙丁戊己庚辛壬癸';
+const STEMS_KO = ['갑','을','병','정','무','기','경','신','임','계'];
+const BRANCHES = '子丑寅卯辰巳午未申酉戌亥';
+const BRANCHES_KO = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+const ZODIAC = ['쥐','소','호랑이','토끼','용','뱀','말','양','원숭이','닭','개','돼지'];
+// 0 목 1 화 2 토 3 금 4 수
+const STEM_EL = [0,0,1,1,2,2,3,3,4,4];
+const BRANCH_EL = [4,2,0,0,2,1,1,2,3,3,2,4];
+
+const EL = [
+  { key:'wood',  ko:'목', hj:'木', josa:'이', cls:'wood',  color:'#3F6B4A',
+    cname:'그린 · 올리브 · 카키', sw:['#3F6B4A','#6E9270','#6B6B3A'], power:'성장과 새로운 시작', dir:'동쪽',
+    wallet:'딥그린·올리브·카키 가죽 지갑', acc:'원목·우드 소재, 식물 모티프 소품', clothes:'카키 셔츠, 올리브 재킷, 그린 니트', space:'초록 식물, 원목 가구와 소품' },
+  { key:'fire',  ko:'화', hj:'火', josa:'가', cls:'fire',  color:'#B63A2F',
+    cname:'레드 · 버건디 · 코랄', sw:['#B63A2F','#7E2320','#E07A5F'], power:'활력과 추진력', dir:'남쪽',
+    wallet:'버건디·와인·코랄 지갑', acc:'로즈골드, 레드·핑크 포인트 소품', clothes:'코랄·핑크 상의, 버건디 니트', space:'따뜻한 조명, 캔들, 붉은 계열 소품' },
+  { key:'earth', ko:'토', hj:'土', josa:'가', cls:'earth', color:'#9C6B3E',
+    cname:'카멜 · 브라운 · 베이지', sw:['#B98A5C','#6B4A30','#D8C3A0'], power:'안정과 중심', dir:'중앙',
+    wallet:'카멜·탄·브라운 가죽 지갑', acc:'도자기, 스톤, 머스타드 포인트', clothes:'베이지 니트, 카멜 코트, 브라운 팬츠', space:'도자기 화분, 흙빛 러그와 쿠션' },
+  { key:'metal', ko:'금', hj:'金', josa:'이', cls:'metal', color:'#C9A964',
+    cname:'아이보리 · 화이트 · 골드', sw:['#EDE3CF','#FFFFFF','#C9A964'], power:'정돈과 결실', dir:'서쪽',
+    wallet:'아이보리·화이트·샴페인 골드 지갑', acc:'골드·실버 반지와 시계 (금속 자체가 금 기운)', clothes:'화이트 셔츠, 그레이 수트, 아이보리 니트', space:'금속 프레임, 흰색 소품' },
+  { key:'water', ko:'수', hj:'水', josa:'가', cls:'water', color:'#1F2A44',
+    cname:'블랙 · 네이비', sw:['#1C1C1C','#1F2A44'], power:'흐름과 유연함', dir:'북쪽',
+    wallet:'블랙·네이비 지갑', acc:'진주, 유리, 물결 모티프', clothes:'블랙·네이비 코트와 셔츠', space:'수경 식물, 유리 화병, 어항' },
+];
+const DAY_DESC = [
+  '곧게 자라는 큰 나무', '유연하게 뻗는 풀과 꽃', '세상을 비추는 태양', '은은하게 밝히는 촛불',
+  '듬직한 큰 산', '곡식을 키우는 논밭의 흙', '단단한 바위와 원석', '빛나는 보석',
+  '넓고 깊은 바다', '생명을 적시는 이슬과 빗물'
+];
+
+const mod = (a, n) => ((a % n) + n) % n;
+
+// 태양 황경 (Meeus 저정밀식, 오차 약 0.01°)
+function sunLongitude(utcMs) {
+  const jd = utcMs / 86400000 + 2440587.5;
+  const T = (jd - 2451545) / 36525;
+  const L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
+  const M = (357.52911 + 35999.05029 * T - 0.0001537 * T * T) * Math.PI / 180;
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * Math.sin(M)
+          + (0.019993 - 0.000101 * T) * Math.sin(2 * M) + 0.000289 * Math.sin(3 * M);
+  const om = (125.04 - 1934.136 * T) * Math.PI / 180;
+  return mod(L0 + C - 0.00569 - 0.00478 * Math.sin(om), 360);
+}
+
+function calcSaju(y, m, d, hh, mm, hasTime) {
+  const h = hasTime ? hh : 12, mi = hasTime ? mm : 0;
+  const utc = Date.UTC(y, m - 1, d, h, mi) - 9 * 3600000;
+  const lon = sunLongitude(utc);
+  const mIdx = Math.floor(mod(lon - 315, 360) / 30);       // 0 = 寅월
+  const sajuYear = (m <= 2 && mIdx >= 10) ? y - 1 : y;
+  const yS = mod(sajuYear - 4, 10), yB = mod(sajuYear - 4, 12);
+  const mB = mod(mIdx + 2, 12);
+  const mS = mod((yS % 5) * 2 + 2 + mIdx, 10);
+
+  let dayOffset = 0, hB = null, hS = null;
+  if (hasTime) {
+    const adj = hh * 60 + mm - 30;                           // 동경 127.5° 보정
+    if (adj >= 23 * 60) dayOffset = 1;                        // 23:30 이후는 다음날 자시
+    hB = Math.floor(mod(adj + 60, 1440) / 120);
+  }
+  const days = Math.round((Date.UTC(y, m - 1, d) - Date.UTC(2000, 0, 1)) / 86400000) + dayOffset;
+  const di = mod(54 + days, 60);                              // 2000-01-01 = 戊午
+  const dS = di % 10, dB = di % 12;
+  if (hasTime) hS = mod((dS % 5) * 2 + hB, 10);
+
+  return { year:[yS,yB], month:[mS,mB], day:[dS,dB], hour: hasTime ? [hS,hB] : null, zodiac: yB, monthBranch: mB };
+}
+
+function analyze(s) {
+  const counts = [0,0,0,0,0];
+  const chars = [s.year, s.month, s.day, s.hour].filter(Boolean);
+  chars.forEach(([st, br]) => { counts[STEM_EL[st]]++; counts[BRANCH_EL[br]]++; });
+  const total = chars.length * 2;
+  const me = STEM_EL[s.day[0]];
+  const insung = mod(me + 4, 5), sik = mod(me + 1, 5), jae = mod(me + 2, 5), gwan = mod(me + 3, 5);
+  const support = counts[me] + counts[insung];
+  const strong = support * 2 >= total;
+  let fav = strong ? [sik, jae, gwan] : [insung, me];
+  fav = fav.map((e, i) => ({ e, i })).sort((a, b) => counts[a.e] - counts[b.e] || a.i - b.i).map(x => x.e);
+
+  const winter = [11, 0, 1].includes(s.monthBranch);
+  const summer = [5, 6, 7].includes(s.monthBranch);
+  let johu = null;
+  if (winter && counts[1] === 0) johu = 1;
+  if (summer && counts[4] === 0) johu = 4;
+  if (johu !== null) fav = [johu, ...fav.filter(e => e !== johu)];
+  const helpful = fav.slice(0, 2);
+
+  const max = Math.max(...counts);
+  let avoid = [];
+  if (max >= 3) counts.forEach((c, e) => { if (c === max && !helpful.includes(e)) avoid.push(e); });
+  if (johu === 1 && counts[4] >= 2 && !helpful.includes(4) && !avoid.includes(4)) avoid.push(4);
+  if (johu === 4 && counts[1] >= 2 && !helpful.includes(1) && !avoid.includes(1)) avoid.push(1);
+
+  const reason = e => {
+    const x = EL[e];
+    if (e === johu) return johu === 1 ? '한겨울에 태어난 차가운 사주라 따뜻한 화(火) 기운이 가장 필요해요.'
+                                      : '한여름에 태어난 뜨거운 사주라 식혀주는 수(水) 기운이 가장 필요해요.';
+    if (counts[e] === 0) return `사주에 ${x.ko}(${x.hj})${x.josa} 하나도 없어요. 비어 있는 기운을 채워줘요.`;
+    if (counts[e] === 1) return `${x.ko}(${x.hj}) 기운이 약해요. 부족한 쪽을 받쳐줘요.`;
+    if (e === insung) return `일간을 살려주는 기운이에요. 충전과 응원의 힘이 돼요.`;
+    return `나와 같은 기운이라 힘을 보태줘요.`;
+  };
+  const avoidReason = e => counts[e] >= 3 ? `이미 ${counts[e]}개로 넘치는 기운이에요.` : '차가운 기운을 더하는 색이에요.';
+  return { counts, total, me, strong, helpful, avoid, johu, reason, avoidReason };
+}
+
+const $ = id => document.getElementById(id);
+let last = null;
+
+function gzCell(ch, ko, el, extra = '') {
+  const x = EL[el];
+  return `<div class="gz ${x.cls} ${extra}" style="background:${x.color}">${ch}<small>${ko}·${x.ko}</small></div>`;
+}
+
+function render() {
+  const name = $('name').value.trim() || '이름';
+  const [y, m, d] = $('date').value.split('-').map(Number);
+  if (!y || !m || !d) return;
+  const hasTime = !$('notime').checked && $('time').value;
+  const [hh, mm] = hasTime ? $('time').value.split(':').map(Number) : [0, 0];
+  const s = calcSaju(y, m, d, hh, mm, !!hasTime);
+  const a = analyze(s);
+  last = { name, y, m, d, hh, mm, hasTime, s, a };
+
+  const pad = n => String(n).padStart(2, '0');
+  const dateLine = `${y}.${pad(m)}.${pad(d)}${hasTime ? ' ' + pad(hh) + ':' + pad(mm) : ''} · 양력 · ${ZODIAC[s.zodiac]}띠`;
+  const cols = [['시주', s.hour], ['일주', s.day], ['월주', s.month], ['연주', s.year]];
+  const pillars = cols.map(([lab, p], i) => {
+    const me = i === 1 ? ' me' : '';
+    if (!p) return `<div class="pillar"><div class="lab">${lab}</div><div class="gz empty">?</div><div class="gz empty">?</div></div>`;
+    return `<div class="pillar${me}"><div class="lab">${lab}${me ? ' (나)' : ''}</div>
+      ${gzCell(STEMS[p[0]], STEMS_KO[p[0]], STEM_EL[p[0]], 'stem')}
+      ${gzCell(BRANCHES[p[1]], BRANCHES_KO[p[1]], BRANCH_EL[p[1]])}</div>`;
+  }).join('');
+
+  const maxC = Math.max(...a.counts, 1);
+  const dist = EL.map((x, e) => {
+    const c = a.counts[e];
+    const tag = c === 0 ? '없음' : c === 1 ? '약함' : c >= 3 ? '많음' : '';
+    return `<div class="dist-row"><div class="dot ${x.cls}" style="background:${x.color}">${x.hj}</div>
+      <div>${x.ko}(${x.hj}) <span class="tag">${tag}</span></div>
+      <div class="bar"><i style="width:${c / maxC * 100}%;background:${x.color}"></i></div><div class="n">${c}</div></div>`;
+  }).join('');
+
+  const recRow = (e, avoid) => {
+    const x = EL[e];
+    return `<div class="rec${avoid ? ' avoid' : ''}"><div class="big-dot ${x.cls}" style="background:${x.color}">${x.hj}</div>
+      <div><h4>${x.ko}(${x.hj})<span>${avoid ? '넘치는 기운' : x.power}</span></h4>
+      <div class="cname" style="color:${x.cls === 'metal' ? '#9A7B34' : x.color}">${x.cname}</div>
+      <div class="swatches">${x.sw.map(c => `<div class="sw" style="background:${c}"></div>`).join('')}</div>
+      <p>${avoid ? a.avoidReason(e) : a.reason(e)}</p></div></div>`;
+  };
+
+  const p1 = EL[a.helpful[0]], p2 = EL[a.helpful[1]] || p1;
+  const avoidHtml = a.avoid.length ? a.avoid.map(e => recRow(e, true)).join('')
+    : `<p class="daymaster">한쪽으로 크게 넘치는 기운이 없는 균형형이에요. 특별히 피할 색은 없어요.</p>`;
+
+  $('card').innerHTML = `
+    <div>
+      <div class="eyebrow">五行 · WALLET COLOR</div>
+      <h3>${esc(name)} 님에게 필요한<br><em>${p1.cname.split(' · ')[0]}</em> 지갑</h3>
+      <p class="meta">${dateLine}</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">사주팔자 <small>${hasTime ? '' : '시간 미상 · 6글자로 계산'}</small></div>
+      <div class="pillars">${pillars}</div>
+      <p class="daymaster">나의 기운 <b>${STEMS[s.day[0]]}${EL[a.me].hj}</b> · ${DAY_DESC[s.day[0]]} · 일간이 ${a.strong ? '강한' : '약한'} 편</p>
+    </div>
+    <div class="panel">
+      <div class="panel-title">오행 분포 <small>총 ${a.total}글자</small></div>
+      <div class="dist">${dist}</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">🎨 보완하면 좋은 색</div>
+      ${a.helpful.map(e => recRow(e, false)).join('')}
+    </div>
+    <div class="panel">
+      <div class="panel-title">🚫 줄이면 좋은 색</div>
+      ${avoidHtml}
+    </div>
+    <div class="panel">
+      <div class="panel-title">💡 일상에서 활용하는 법</div>
+      <ul class="tips">
+        <li>👛<b>지갑</b><span>${p1.wallet}</span></li>
+        <li>💍<b>액세서리</b><span>${p1.acc}</span></li>
+        <li>👔<b>옷</b><span>${p2.clothes}</span></li>
+        <li>🏠<b>공간</b><span>${p1.space}</span></li>
+        <li>🧭<b>방향</b><span>${p1.dir}${p2 !== p1 ? ', ' + p2.dir : ''}</span></li>
+      </ul>
+    </div>
+    <p class="disc">전통 명리의 오행 해석을 바탕으로 한 재미용 컬러 가이드예요.</p>
+    <div class="card-foot"><span class="hanja">木火土金水</span><span>[${esc($('handle').value.trim() || '@계정명')}]</span></div>`;
+  $('export').hidden = true;
+}
+
+function esc(t) { return t.replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+
+function toast(msg) { $('toast').textContent = msg; setTimeout(() => { if ($('toast').textContent === msg) $('toast').textContent = ''; }, 3000); }
+
+function asText() {
+  const { name, s, a } = last;
+  const pil = [s.hour, s.day, s.month, s.year].map(p => p ? STEMS[p[0]] + BRANCHES[p[1]] : '??').join(' ');
+  const line = e => `${EL[e].hj} ${EL[e].ko}(${EL[e].hj}) · ${EL[e].cname}`;
+  return [
+    `🔮 ${name} 님의 오행 컬러`,
+    `사주: ${pil} (시·일·월·연)`,
+    `나의 기운: ${STEMS[s.day[0]]}${EL[a.me].hj} · ${DAY_DESC[s.day[0]]}`,
+    `오행: ` + EL.map((x, e) => `${x.ko} ${a.counts[e]}`).join(' / '),
+    ``, `🎨 보완하면 좋은 색`, ...a.helpful.map(line),
+    ``, `🚫 줄이면 좋은 색`, ...(a.avoid.length ? a.avoid.map(line) : ['특별히 없음 (균형형)']),
+    ``, `💡 일상에서 활용하는 법`,
+    `👛 지갑: ${EL[a.helpful[0]].wallet}`,
+    `💍 액세서리: ${EL[a.helpful[0]].acc}`,
+    `🧭 방향: ${EL[a.helpful[0]].dir}`,
+  ].join('\n');
+}
+
+$('f').addEventListener('submit', e => { e.preventDefault(); render(); });
+['notime'].forEach(id => $(id).addEventListener('change', () => { $('time').disabled = $('notime').checked; render(); }));
+$('handle').addEventListener('input', render);
+
+$('copy').addEventListener('click', () => {
+  const t = asText();
+  navigator.clipboard.writeText(t).then(() => toast('결과 텍스트를 복사했어요.'))
+    .catch(() => toast('복사가 막혀 있어요. 카드를 직접 선택해 복사해 주세요.'));
+});
+
+$('mkimg').addEventListener('click', async () => {
+  if (!window.html2canvas) { toast('이미지 도구를 불러오지 못했어요. 새로고침 후 다시 시도해 주세요.'); return; }
+  toast('이미지를 만드는 중이에요…');
+  try {
+    await document.fonts.ready;
+    const card = $('card');
+    const canvas = await html2canvas(card, { scale: 1080 / card.offsetWidth, backgroundColor: '#F3EDE2', useCORS: true });
+    $('outimg').src = canvas.toDataURL('image/png');
+    $('export').hidden = false;
+    toast('이미지가 준비됐어요. 아래에서 저장하세요.');
+    $('export').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } catch (err) { toast('이미지를 만들지 못했어요. 다시 시도해 주세요.'); }
+});
+
+render();
+</script>
